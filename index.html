@@ -16,6 +16,13 @@
       a:hover { text-decoration:underline; }
       .quiz { background:#eef7ff; padding:18px 22px; border-radius:12px; margin-top:24px; }
       .quiz ol { margin:0; padding-left:20px; }
+      .quiz-button { display:inline-block; margin:6px 8px 6px 0; padding:10px 14px; border:1px solid #034f84; border-radius:8px; background:#ffffff; color:#034f84; cursor:pointer; }
+      .quiz-button:hover { background:#dff0ff; }
+      .quiz-button.correct { background:#d4f8d4; border-color:#28a745; color:#1b5e20; }
+      .quiz-button.wrong { background:#ffd4d4; border-color:#d12a2a; color:#7a1f1f; }
+      .quiz-button[disabled] { opacity:0.65; cursor:default; }
+      .quiz .result { margin-top:10px; font-weight:700; }
+      .quiz-summary { margin-top:18px; background:#ffffff; padding:12px 14px; border-radius:10px; border:1px solid #b3d4fc; }
     </style>
   </head>
   <body>
@@ -45,7 +52,7 @@
       <p>The World Cup happens every four years and features teams from all continents. Fans watch exciting games, cheer for their favorite players, and celebrate every great goal.</p>
 
       <h2>World Cup 2026</h2>
-      <p>The 2026 World Cup will be special because it is hosted by three countries: the United States, Canada, and Mexico. This means many cities across North America will welcome fans and teams from around the world.</p>
+      <p>The 2026 World Cup  will be special because it is hosted by three countries: the United States, Canada, and Mexico. This means many cities across North America will welcome fans and teams from around the world.</p>
 
       <p>For the first time, the tournament will include 48 teams instead of 32. That means more countries will get a chance to play at the World Cup and more exciting matches will happen.</p>
 
@@ -58,17 +65,115 @@
 
       <h2>Quiz About Me and Soccer</h2>
       <div class="quiz">
-        <p>Try answering these 7 questions about me and soccer:</p>
-        <ol>
-          <li>How old am I?</li>
-          <li>What is my brother's name?</li>
-          <li>Which soccer club do I support?</li>
-          <li>What position do I enjoy playing in soccer?</li>
-          <li>Which year is the next World Cup mentioned on this page?</li>
-          <li>How many teams will play in the 2026 World Cup?</li>
-          <li>Which three countries will host the 2026 World Cup?</li>
-        </ol>
+        <p>Choose any answer button. Each choice will immediately show whether it is correct or incorrect.</p>
+        <div class="quiz-summary">Score: <span id="scoreValue">0</span> / 7 — <span id="percentValue">0</span>% correct</div>
+
+        <div class="question" data-answer="B">
+          <p><strong>1. How old am I?</strong></p>
+          <button class="quiz-button" data-choice="A">A. 10 years old</button>
+          <button class="quiz-button" data-choice="B">B. 12 years old</button>
+          <button class="quiz-button" data-choice="C">C. 14 years old</button>
+          <button class="quiz-button" data-choice="D">D. 16 years old</button>
+          <p class="result"></p>
+        </div>
+
+        <div class="question" data-answer="C">
+          <p><strong>2. What is my brother's name?</strong></p>
+          <button class="quiz-button" data-choice="A">A. Leo</button>
+          <button class="quiz-button" data-choice="B">B. Max</button>
+          <button class="quiz-button" data-choice="C">C. Ree</button>
+          <button class="quiz-button" data-choice="D">D. Sam</button>
+          <p class="result"></p>
+        </div>
+
+        <div class="question" data-answer="C">
+          <p><strong>3. Which soccer club do I support?</strong></p>
+          <button class="quiz-button" data-choice="A">A. Manchester United</button>
+          <button class="quiz-button" data-choice="B">B. Arsenal</button>
+          <button class="quiz-button" data-choice="C">C. Manchester City</button>
+          <button class="quiz-button" data-choice="D">D. Chelsea</button>
+          <p class="result"></p>
+        </div>
+
+        <div class="question" data-answer="D">
+          <p><strong>4. What position do I enjoy playing in soccer?</strong></p>
+          <button class="quiz-button" data-choice="A">A. Goalkeeper</button>
+          <button class="quiz-button" data-choice="B">B. Midfielder</button>
+          <button class="quiz-button" data-choice="C">C. Defender</button>
+          <button class="quiz-button" data-choice="D">D. Striker</button>
+          <p class="result"></p>
+        </div>
+
+        <div class="question" data-answer="C">
+          <p><strong>5. Which year is the next World Cup mentioned on this page?</strong></p>
+          <button class="quiz-button" data-choice="A">A. 2024</button>
+          <button class="quiz-button" data-choice="B">B. 2025</button>
+          <button class="quiz-button" data-choice="C">C. 2026</button>
+          <button class="quiz-button" data-choice="D">D. 2028</button>
+          <p class="result"></p>
+        </div>
+
+        <div class="question" data-answer="C">
+          <p><strong>6. How many teams will play in the 2026 World Cup?</strong></p>
+          <button class="quiz-button" data-choice="A">A. 32 teams</button>
+          <button class="quiz-button" data-choice="B">B. 40 teams</button>
+          <button class="quiz-button" data-choice="C">C. 48 teams</button>
+          <button class="quiz-button" data-choice="D">D. 56 teams</button>
+          <p class="result"></p>
+        </div>
+
+        <div class="question" data-answer="A">
+          <p><strong>7. Which three countries will host the 2026 World Cup?</strong></p>
+          <button class="quiz-button" data-choice="A">A. United States, Canada, Mexico</button>
+          <button class="quiz-button" data-choice="B">B. Brazil, Argentina, Chile</button>
+          <button class="quiz-button" data-choice="C">C. Spain, France, Italy</button>
+          <button class="quiz-button" data-choice="D">D. England, Germany, Netherlands</button>
+          <p class="result"></p>
+        </div>
       </div>
     </div>
+
+    <script>
+      const totalQuestions = document.querySelectorAll('.question').length;
+      let score = 0;
+      let answeredCount = 0;
+      const scoreValue = document.getElementById('scoreValue');
+      const percentValue = document.getElementById('percentValue');
+
+      function updateScore() {
+        scoreValue.textContent = score;
+        percentValue.textContent = Math.round((score / totalQuestions) * 100);
+      }
+
+      document.querySelectorAll('.question').forEach(question => {
+        const correctAnswer = question.dataset.answer;
+        let answered = false;
+
+        question.querySelectorAll('.quiz-button').forEach(button => {
+          button.addEventListener('click', () => {
+            if (answered) return;
+            answered = true;
+            answeredCount += 1;
+            const chosen = button.dataset.choice;
+            question.querySelectorAll('.quiz-button').forEach(btn => {
+              btn.classList.remove('correct', 'wrong');
+              btn.disabled = true;
+            });
+            const result = question.querySelector('.result');
+            if (chosen === correctAnswer) {
+              button.classList.add('correct');
+              result.textContent = 'Correct! Nice choice.';
+              score += 1;
+            } else {
+              button.classList.add('wrong');
+              result.textContent = `Incorrect. The correct answer is ${correctAnswer}.`;
+            }
+            updateScore();
+          });
+        });
+      });
+
+      updateScore();
+    </script>
   </body>
 </html>
